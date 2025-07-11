@@ -8,19 +8,18 @@
       </template>
       
       <el-form
-        ref="loginForm"
-        :model="loginForm"
+        ref="loginFormRef"
+        :model="loginFormData"
         :rules="rules"
         label-position="top"
-        @submit.prevent="handleLogin"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+          <el-input v-model="loginFormData.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         
         <el-form-item label="密码" prop="password">
           <el-input
-            v-model="loginForm.password"
+            v-model="loginFormData.password"
             placeholder="请输入密码"
             type="password"
             show-password
@@ -28,11 +27,11 @@
         </el-form-item>
         
         <el-form-item>
-          <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
+          <el-checkbox v-model="loginFormData.remember">记住我</el-checkbox>
         </el-form-item>
         
         <el-form-item>
-          <el-button type="primary" native-type="submit" :loading="loading" class="login-button">
+          <el-button type="primary" @click="handleLogin" :loading="loading" class="login-button">
             登录
           </el-button>
         </el-form-item>
@@ -62,7 +61,8 @@ const router = useRouter()
 const route = useRoute()
 
 const loading = ref(false)
-const loginForm = reactive({
+const loginFormRef = ref(null)
+const loginFormData = reactive({
   username: '',
   password: '',
   remember: false
@@ -78,47 +78,40 @@ const rules = {
   ]
 }
 
-const handleLogin = async () => {
-  loading.value = true
-  try {
-    const response = await request.post('/api/v1/auth/login', {
-      username: loginForm.username,
-      password: loginForm.password
-    });
-
-    if (response && response.access_token) {
-      // 登录成功逻辑
-      localStorage.setItem('user-token', response.access_token)
-      // 假设后端返回了 user 信息，并存储
-      if (response.user) {
-        localStorage.setItem('user-info', JSON.stringify(response.user))
-      }
-      
-      ElMessage.success('登录成功')
-      
-      // 触发 App.vue 更新状态 (通过导航到目标页)
-      const redirectPath = route.query.redirect || '/'
-      // 使用 replace 防止用户回退到登录页
-      await router.replace(redirectPath) 
-      // 手动调用 App.vue 的检查状态方法，确保导航栏立即更新
-      // 注意：这需要 App.vue 暴露该方法，或者使用状态管理库
-      // 简单起见，先依赖页面跳转触发 App.vue 的 onMounted
-
-    } else {
-      // 如果后端没有按预期返回 token
-      ElMessage.error('登录失败，请稍后重试')
+const handleLogin = () => {
+  loginFormRef.value.validate(async valid => {
+    if (!valid) {
+      ElMessage.error('请完善表单后重试');
+      return;
     }
-  } catch (error) {
-    // request 拦截器已经处理了 ElMessage 提示
-    console.error('Login failed:', error)
-  } finally {
-    loading.value = false
-  }
+    loading.value = true;
+    try {
+      const response = await request.post('/api/v1/auth/login', {
+        username: loginFormData.username,
+        password: loginFormData.password
+      });
+      if (response && response.access_token) {
+        localStorage.setItem('user-token', response.access_token);
+        if (response.user) {
+          localStorage.setItem('user-info', JSON.stringify(response.user));
+        }
+        ElMessage.success('登录成功');
+        const redirectPath = route.query.redirect || '/';
+        await router.replace(redirectPath);
+      } else {
+        ElMessage.error('登录失败，请稍后重试');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      loading.value = false;
+    }
+  });
 }
 
 const demoLogin = () => {
-  loginForm.username = 'admin'
-  loginForm.password = 'admin'
+  loginFormData.username = 'admin'
+  loginFormData.password = 'admin'
   handleLogin()
 }
 </script>

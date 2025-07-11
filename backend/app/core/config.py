@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "uploads")
     MAX_UPLOAD_SIZE: int = int(os.getenv("MAX_UPLOAD_SIZE", "104857600"))  # 100MB in bytes
 
+    # AI分析服务配置
+    MINICPM_V_API_URL: str = os.getenv("MINICPM_V_API_URL", "")
+    MINICPM_V_API_KEY: str = os.getenv("MINICPM_V_API_KEY", "")
+
     class Config:
         case_sensitive = True
 

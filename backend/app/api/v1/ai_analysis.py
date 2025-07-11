@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from typing import Dict, Any
 from ...core.database import get_db
 from ...core.security import get_current_active_user
 from ...core.ai import ai_analyzer
 from ...models.user import User
+from ...models.course import Course
 import os
 import shutil
 

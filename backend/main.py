@@ -35,3 +35,7 @@ app.include_router(stats.router, prefix=f"{settings.API_V1_STR}/stats", tags=["�
 @app.get("/")
 async def root():
     return {"message": "欢迎使用AI舞蹈教练系统API"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
