@@ -401,7 +401,7 @@ const currentUserId = userInfo.id
 
 const fetchMessages = async (chat) => {
   try {
-    const res = await request.get('/api/v1/chat/messages', { params: { other_user_id: chat.id, skip: 0, limit: 100 } })
+    const res = await request.get('/chat/messages', { params: { other_user_id: chat.id, skip: 0, limit: 100 } })
     chat.messages = res.map(msg => ({
       id: msg.id,
       content: msg.content,
@@ -445,7 +445,7 @@ const sendMessage = async () => {
   if (!newMessage.value.trim()) return
 
   try {
-    const res = await request.post('/api/v1/chat/messages', {
+    const res = await request.post('/chat/messages', {
       receiver_id: currentChat.value.id,
       content: newMessage.value,
       message_type: 'text'

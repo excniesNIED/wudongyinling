@@ -282,7 +282,7 @@ const healthRecords = ref([])
 
 const fetchHealthRecords = async () => {
   try {
-    healthRecords.value = await request.get('/api/v1/health', { params: { skip: 0, limit: 10 } })
+    healthRecords.value = await request.get('/health', { params: { skip: 0, limit: 10 } })
   } catch (error) {
     ElMessage.error('获取健康记录失败')
   }
@@ -366,7 +366,7 @@ const addHealthRecord = async () => {
       heart_rate: Number(currentHR),
       blood_sugar: Number(currentBS)
     }
-    await request.post('/api/v1/health', payload)
+    await request.post('/health', payload)
     ElMessage.success('健康记录已添加')
     fetchHealthRecords()
   } catch (error) {

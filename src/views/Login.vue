@@ -74,7 +74,7 @@ const rules = {
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少为6个字符', trigger: 'blur' }
+    { min: 5, message: '密码至少为5个字符', trigger: 'blur' }
   ]
 }
 
@@ -86,7 +86,7 @@ const handleLogin = () => {
     }
     loading.value = true;
     try {
-      const response = await request.post('/api/v1/auth/login', {
+      const response = await request.post('/auth/login', {
         username: loginFormData.username,
         password: loginFormData.password
       });
