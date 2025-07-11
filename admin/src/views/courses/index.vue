@@ -94,7 +94,7 @@
         <el-form-item label="封面图片" prop="cover_url">
           <el-upload
             class="cover-uploader"
-            action="/api/upload/image"
+            action="/api/v1/courses/upload/image"
             :headers="uploadHeaders"
             :show-file-list="false"
             :on-success="handleCoverSuccess"
@@ -113,7 +113,7 @@
         <el-form-item label="课程视频" prop="video_url">
           <el-upload
             class="video-uploader"
-            action="/api/upload/video"
+            action="/api/v1/courses/upload/video"
             :headers="uploadHeaders"
             :show-file-list="false"
             :on-success="handleVideoSuccess"
