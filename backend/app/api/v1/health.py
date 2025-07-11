@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, WebSocket
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from ...core.database import get_db
 from ...models.health import HealthRecord
 from pydantic import BaseModel
@@ -27,7 +27,7 @@ class HealthRecordResponse(HealthRecordBase):
 
 @router.get("/", response_model=List[HealthRecordResponse])
 async def get_health_records(
-    user_id: int | None = None,
+    user_id: Optional[int] = None,
     skip: int = 0,
     limit: int = 10,
     db: Session = Depends(get_db)

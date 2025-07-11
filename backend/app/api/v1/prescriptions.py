@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List, Dict
+from typing import List, Dict, Optional
 from ...core.database import get_db
 from ...models.prescription import Prescription
 from pydantic import BaseModel
@@ -17,22 +17,22 @@ class PrescriptionCreate(PrescriptionBase):
     user_id: int
 
 class PrescriptionUpdate(BaseModel):
-    disease_type: str | None = None
-    training_plan: str | None = None
-    schedule: Dict[str, list] | None = None
+    disease_type: Optional[str] = None
+    training_plan: Optional[str] = None
+    schedule: Optional[Dict[str, list]] = None
 
 class PrescriptionResponse(PrescriptionBase):
     id: int
     user_id: int
     created_at: datetime
-    updated_at: datetime | None
+    updated_at: Optional[datetime] = None
     class Config:
         from_attributes = True
 
 @router.get("/", response_model=List[PrescriptionResponse])
 async def get_prescriptions(
-    user_id: int | None = None,
-    disease_type: str | None = None,
+    user_id: Optional[int] = None,
+    disease_type: Optional[str] = None,
     skip: int = 0,
     limit: int = 10,
     db: Session = Depends(get_db)

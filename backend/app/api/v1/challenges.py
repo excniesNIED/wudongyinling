@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from ...core.database import get_db
 from ...models.challenge import Challenge, ChallengeRecord
 from ...models.user import User
@@ -19,10 +19,10 @@ class ChallengeCreate(ChallengeBase):
     pass
 
 class ChallengeUpdate(BaseModel):
-    title: str | None = None
-    description: str | None = None
-    start_date: datetime | None = None
-    end_date: datetime | None = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
 
 class ChallengeResponse(ChallengeBase):
     id: int
@@ -111,7 +111,7 @@ async def check_in(challenge_id: int, user_id: int, db: Session = Depends(get_db
 @router.get("/{challenge_id}/records", response_model=List[ChallengeRecordResponse])
 async def get_challenge_records(
     challenge_id: int,
-    user_id: int | None = None,
+    user_id: Optional[int] = None,
     db: Session = Depends(get_db)
 ):
     query = db.query(ChallengeRecord).filter(ChallengeRecord.challenge_id == challenge_id)
