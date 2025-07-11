@@ -36,14 +36,14 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="course in filteredCourses" :key="course.id">
           <el-card class="course-card" shadow="hover" @click="showCourseDetails(course)">
-            <el-image :src="course.thumbnail" fit="cover" class="course-thumbnail" />
+            <el-image :src="course.cover_url" fit="cover" class="course-thumbnail" />
             <div class="course-info">
               <h3 class="course-title">{{ course.title }}</h3>
               <div class="course-meta">
                 <span>
                   {{ course.rating }} <el-icon><Star /></el-icon>
                 </span>
-                <span>{{ course.duration }}</span>
+                <span>{{ course.duration }} 分钟</span>
               </div>
               <el-tag 
                 :type="getDifficultyType(course.difficulty)" 
@@ -64,7 +64,7 @@
         <el-row :gutter="20">
           <el-col :xs="24" :sm="24" :md="16">
             <div class="video-player">
-              <el-image v-if="currentCourse" :src="currentCourse.videoSrc" fit="cover" class="player-image" />
+              <el-image v-if="currentCourse" :src="currentCourse.video_url" fit="cover" class="player-image" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="8">
@@ -136,9 +136,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Search, Star, Share, Back, Microphone } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 
 // 搜索和分类状态
 const searchQuery = ref('')
@@ -153,74 +154,19 @@ const showAIChat = ref(false)
 const chatMessage = ref('')
 
 // 课程数据
-const courses = ref([
-  {
-    id: 1,
-    title: '经典广场舞《幸福的花儿开》',
-    thumbnail: '/images/xfhek.png',
-    videoSrc: '/images/xfhek-play.png',
-    category: 'square',
-    rating: 4.8,
-    duration: '10分钟',
-    difficulty: '初级',
-    description: '这是一套适合老年人的经典广场舞教程，动作轻柔简单，非常适合初学者。本课程由专业舞蹈老师讲解，通过分解动作教学，让您轻松学会每一个舞步。跟随视频学习，既能锻炼身体又能愉悦心情！'
-  },
-  {
-    id: 2,
-    title: '24式太极拳基础教学',
-    thumbnail: '/images/24tjq.png',
-    videoSrc: '/images/24tjq-play.png',
-    category: 'taichi',
-    rating: 4.9,
-    duration: '15分钟',
-    difficulty: '初级',
-    description: '太极拳是中国传统武术，动作舒缓连贯，非常适合老年人锻炼。本课程讲解24式太极拳基本招式，从呼吸、站姿到动作要领，全面讲解，适合零基础学员。'
-  },
-  {
-    id: 3,
-    title: '傣族舞《雨中花》基本动作',
-    thumbnail: '/images/yzh.png',
-    videoSrc: '/images/yzh-play.png',
-    category: 'folk',
-    rating: 4.7,
-    duration: '12分钟',
-    difficulty: '中级',
-    description: '傣族舞以优美的手臂动作和轻盈的步伐著称，本课程通过简化的《雨中花》舞蹈动作，教授傣族舞的基本技巧和风格，帮助学员感受民族舞的韵律之美。'
-  },
-  {
-    id: 4,
-    title: '慢四步交谊舞入门教程',
-    thumbnail: '/images/zgjyw.png',
-    videoSrc: '/images/zgjyw-play.png',
-    category: 'social',
-    rating: 4.6,
-    duration: '8分钟',
-    difficulty: '初级',
-    description: '交谊舞是老年人喜爱的社交舞蹈形式，本课程从最基础的慢四步开始教学，内容包括基本步法、握持方式和简单的引导技巧，适合想要学习交谊舞的初学者。'
-  },
-  {
-    id: 5,
-    title: '关节保护健身操',
-    thumbnail: '/images/jsc.png',
-    videoSrc: '/images/jsc-play.png',
-    category: 'fitness',
-    rating: 4.9,
-    duration: '10分钟',
-    difficulty: '初级',
-    description: '专为老年人设计的健身操，重点关注关节保护和灵活性训练，动作简单易学，强度适中，每天坚持练习可有效改善关节僵硬和肌肉衰退问题。'
-  },
-  {
-    id: 6,
-    title: '动感广场舞《欢乐的歌》',
-    thumbnail: '/images/hldg.png',
-    videoSrc: '/images/hldg-play.png',
-    category: 'square',
-    rating: 4.5,
-    duration: '12分钟',
-    difficulty: '中级',
-    description: '这是一套节奏感强、动作活泼的广场舞，适合有一定基础的学员。舞蹈配合欢快的音乐，能够有效锻炼心肺功能和协调性，让舞者在舞动中感受快乐。'
+const courses = ref([])
+
+const fetchCourses = async () => {
+  try {
+    courses.value = await request.get('/api/v1/courses', { params: { skip: 0, limit: 100 } })
+  } catch (error) {
+    ElMessage.error('获取课程列表失败')
   }
-])
+}
+
+onMounted(() => {
+  fetchCourses()
+})
 
 // 分类数据
 const categories = [
@@ -253,19 +199,19 @@ const filteredCourses = computed(() => {
   return result
 })
 
-// 获取难度标签的样式类型
+// 获取难度标签的样式类型 (根据英文难度值)
 const getDifficultyType = (difficulty) => {
-  if (!difficulty) return ''
-  
+  if (!difficulty) return '';
+  // difficulty values: beginner, intermediate, advanced
   switch (difficulty) {
-    case '初级':
-      return 'success'
-    case '中级':
-      return 'warning'
-    case '高级':
-      return 'danger'
+    case 'beginner':
+      return 'success';
+    case 'intermediate':
+      return 'warning';
+    case 'advanced':
+      return 'danger';
     default:
-      return 'info'
+      return 'info';
   }
 }
 

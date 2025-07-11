@@ -21,4 +21,19 @@ async def get_dashboard_stats(db: Session = Depends(get_db)):
         "totalCourses": total_courses,
         "totalChallenges": total_challenges,
         "totalHealthRecords": total_health_records
-    } 
+    }
+
+@router.get("/users")
+async def get_user_stats(db: Session = Depends(get_db)):
+    total_users = db.query(User).count()
+    return {"totalUsers": total_users}
+
+@router.get("/courses")
+async def get_course_stats(db: Session = Depends(get_db)):
+    total_courses = db.query(Course).count()
+    return {"totalCourses": total_courses}
+
+@router.get("/challenges")
+async def get_challenge_stats(db: Session = Depends(get_db)):
+    total_challenges = db.query(Challenge).count()
+    return {"totalChallenges": total_challenges} 

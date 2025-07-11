@@ -45,10 +45,10 @@
         <div class="row">
           <div class="col-md-3" v-for="course in courses" :key="course.id">
             <div class="course-card">
-              <img :src="course.image" :alt="course.title" class="course-img">
+              <img :src="course.cover_url" :alt="course.title" class="course-img">
               <div class="p-3">
                 <h4 class="course-title">{{ course.title }}</h4>
-                <p class="course-duration"><i class="far fa-clock"></i> {{ course.duration }} · {{ course.level }}</p>
+                <p class="course-duration"><i class="far fa-clock"></i> {{ course.duration }} · {{ course.difficulty }}</p>
                 <el-button type="primary" class="w-100" @click="navigateTo('/dance-courses')">开始学习</el-button>
               </div>
             </div>
@@ -90,42 +90,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 
 const router = useRouter()
 
 // 课程数据
-const courses = ref([
-  {
-    id: 1,
-    title: '广场舞基础入门',
-    image: '/images/gcw.jpeg',
-    duration: '12节课',
-    level: '适合初学者'
-  },
-  {
-    id: 2,
-    title: '民族舞精选',
-    image: '/images/mzw.jpg',
-    duration: '8节课',
-    level: '中级水平'
-  },
-  {
-    id: 3,
-    title: '健身舞每日练',
-    image: '/images/jsw.png',
-    duration: '30节课',
-    level: '适合所有人'
-  },
-  {
-    id: 4,
-    title: '交谊舞基础',
-    image: '/images/jyw.jpg',
-    duration: '10节课',
-    level: '双人学习'
+const courses = ref([])
+
+const fetchCourses = async () => {
+  try {
+    courses.value = await request.get('/api/v1/courses', { params: { skip: 0, limit: 4 } })
+  } catch (error) {
+    ElMessage.error('获取热门课程失败')
   }
-])
+}
+
+onMounted(() => {
+  fetchCourses()
+})
 
 // 用户评价数据
 const reviews = ref([

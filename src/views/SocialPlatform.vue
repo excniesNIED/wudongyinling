@@ -189,9 +189,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { StarFilled, ChatDotRound, Share, Promotion } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 
 // 当前激活的标签页
 const activeTab = ref('feed')
@@ -395,6 +396,27 @@ const chatList = ref([
   }
 ])
 
+const userInfo = JSON.parse(localStorage.getItem('user-info') || '{}')
+const currentUserId = userInfo.id
+
+const fetchMessages = async (chat) => {
+  try {
+    const res = await request.get('/api/v1/chat/messages', { params: { other_user_id: chat.id, skip: 0, limit: 100 } })
+    chat.messages = res.map(msg => ({
+      id: msg.id,
+      content: msg.content,
+      time: new Date(msg.created_at).toLocaleString(),
+      isSender: msg.sender_id === currentUserId
+    }))
+  } catch (error) {
+    ElMessage.error('获取消息失败')
+  }
+}
+
+onMounted(() => {
+  fetchMessages(currentChat.value)
+})
+
 const activeChat = ref('1')
 const currentChat = ref(chatList.value[0])
 const newMessage = ref('')
@@ -416,19 +438,28 @@ const handleShare = (post) => {
 const selectChat = (chat) => {
   currentChat.value = chat
   activeChat.value = chat.id
+  fetchMessages(chat)
 }
 
-const sendMessage = () => {
+const sendMessage = async () => {
   if (!newMessage.value.trim()) return
-  
-  currentChat.value.messages.push({
-    id: Date.now(),
-    content: newMessage.value,
-    time: '刚刚',
-    isSender: true
-  })
-  
-  newMessage.value = ''
+
+  try {
+    const res = await request.post('/api/v1/chat/messages', {
+      receiver_id: currentChat.value.id,
+      content: newMessage.value,
+      message_type: 'text'
+    })
+    currentChat.value.messages.push({
+      id: res.id,
+      content: res.content,
+      time: new Date(res.created_at).toLocaleString(),
+      isSender: true
+    })
+    newMessage.value = ''
+  } catch (error) {
+    // 错误提示由拦截器处理
+  }
 }
 </script>
 

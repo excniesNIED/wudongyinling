@@ -45,15 +45,18 @@ export const challengeApi = {
   createChallenge: (data) => request.post(`${API_PREFIX}/challenges`, data),
   updateChallenge: (id, data) => request.put(`${API_PREFIX}/challenges/${id}`, data),
   deleteChallenge: (id) => request.delete(`${API_PREFIX}/challenges/${id}`),
-  getRecords: (challengeId, params) => request.get(`${API_PREFIX}/challenges/${challengeId}/records`, { params })
+  getRecords: (challengeId, params) => request.get(`${API_PREFIX}/challenges/${challengeId}/records`, { params }),
+  getChallenge: (challengeId) => request.get(`${API_PREFIX}/challenges/${challengeId}`),
+  joinChallenge: (challengeId, userId) => request.post(`${API_PREFIX}/challenges/${challengeId}/join`, null, { params: { user_id: userId } }),
+  checkIn: (challengeId, userId) => request.post(`${API_PREFIX}/challenges/${challengeId}/check-in`, null, { params: { user_id: userId } })
 }
 
 // AI分析API
 export const aiApi = {
   analyzeVideo: (data) => request.post(`${API_PREFIX}/ai/analyze`, data),
-  getFeedback: (videoId) => request.get(`${API_PREFIX}/ai/feedback/${videoId}`),
+  getFeedback: (videoUrl) => request.post(`${API_PREFIX}/ai/feedback`, { video_url: videoUrl }),
   compareVideos: (data) => request.post(`${API_PREFIX}/ai/compare`, data),
-  chatWithAI: (data) => request.post(`${API_PREFIX}/ai/chat`, data)
+  
 }
 
 // 统计数据API

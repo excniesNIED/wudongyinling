@@ -120,6 +120,27 @@ async def get_challenge_records(
     records = query.order_by(ChallengeRecord.check_in_date.desc()).all()
     return records
 
+@router.get("/{challenge_id}", response_model=ChallengeResponse)
+async def get_challenge_by_id(challenge_id: int, db: Session = Depends(get_db)):
+    challenge = db.query(Challenge).filter(Challenge.id == challenge_id).first()
+    if not challenge:
+        raise HTTPException(status_code=404, detail="挑战不存在")
+    challenge.participant_count = len(challenge.participants)
+    return challenge
+
+@router.put("/{challenge_id}", response_model=ChallengeResponse)
+async def update_challenge(challenge_id: int, challenge_update: ChallengeUpdate, db: Session = Depends(get_db)):
+    db_challenge = db.query(Challenge).filter(Challenge.id == challenge_id).first()
+    if not db_challenge:
+        raise HTTPException(status_code=404, detail="挑战不存在")
+    update_data = challenge_update.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(db_challenge, field, value)
+    db.commit()
+    db.refresh(db_challenge)
+    db_challenge.participant_count = len(db_challenge.participants)
+    return db_challenge
+
 @router.delete("/{challenge_id}")
 async def delete_challenge(challenge_id: int, db: Session = Depends(get_db)):
     challenge = db.query(Challenge).filter(Challenge.id == challenge_id).first()

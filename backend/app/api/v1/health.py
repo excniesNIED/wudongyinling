@@ -62,6 +62,17 @@ async def delete_health_record(record_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "记录已删除"}
 
+@router.put("/{record_id}", response_model=HealthRecordResponse)
+async def update_health_record(record_id: int, record: HealthRecordBase, db: Session = Depends(get_db)):
+    db_record = db.query(HealthRecord).filter(HealthRecord.id == record_id).first()
+    if not db_record:
+        raise HTTPException(status_code=404, detail="记录不存在")
+    for field, value in record.model_dump(exclude_unset=True).items():
+        setattr(db_record, field, value)
+    db.commit()
+    db.refresh(db_record)
+    return db_record
+
 # WebSocket端点用于实时健康数据
 @router.websocket("/ws/{user_id}")
 async def health_data_websocket(websocket: WebSocket, user_id: int):

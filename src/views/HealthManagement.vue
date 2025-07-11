@@ -113,12 +113,10 @@
           </div>
           <!-- 健康记录表格 -->
           <el-table :data="healthRecords" stripe class="mt-4 record-table">
-            <el-table-column prop="time" label="时间" width="180" class-name="first-column" />
-            <el-table-column prop="bp" label="血压 (mmHg)" />
-            <el-table-column prop="hr" label="心率 (次/分)" />
-            <el-table-column prop="bs" label="血糖 (mmol/L)" />
-            <el-table-column prop="activityState" label="活动状态" />
-            <el-table-column prop="dietState" label="饮食状态" />
+            <el-table-column prop="recorded_at" label="时间" width="180" class-name="first-column" />
+            <el-table-column prop="blood_pressure" label="血压 (mmHg)" />
+            <el-table-column prop="heart_rate" label="心率 (次/分)" />
+            <el-table-column prop="blood_sugar" label="血糖 (mmol/L)" />
           </el-table>
         </el-card>
       </div>
@@ -196,6 +194,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import Icons from '../utils/icons'
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 import {
   Plus,
   Share
@@ -280,6 +279,14 @@ const healthMetrics = ref([
 
 // 健康记录
 const healthRecords = ref([])
+
+const fetchHealthRecords = async () => {
+  try {
+    healthRecords.value = await request.get('/api/v1/health', { params: { skip: 0, limit: 10 } })
+  } catch (error) {
+    ElMessage.error('获取健康记录失败')
+  }
+}
 let healthUpdateInterval = null
 
 // 生成指定范围内的随机整数
@@ -348,21 +355,23 @@ const updateHealthMetrics = () => {
 }
 
 // 添加健康记录
-const addHealthRecord = () => {
-  const now = new Date()
-  const currentTime = now.toLocaleString('zh-CN', { hour12: false })
-  const currentBP = healthMetrics.value.find(m => m.id === 1)?.value || '-'
-  const currentHR = healthMetrics.value.find(m => m.id === 2)?.value || '-'
-  const currentBS = healthMetrics.value.find(m => m.id === 3)?.value || '-'
-
-  healthRecords.value.unshift({ // 使用 unshift 在开头添加新纪录
-    time: currentTime,
-    bp: currentBP,
-    hr: currentHR,
-    bs: currentBS,
-    activityState: '静息', // 默认值
-    dietState: '空腹' // 默认值
-  })
+const addHealthRecord = async () => {
+  try {
+    const currentBP = healthMetrics.value.find(m => m.id === 1)?.value || '-'
+    const currentHR = healthMetrics.value.find(m => m.id === 2)?.value || '-'
+    const currentBS = healthMetrics.value.find(m => m.id === 3)?.value || '-'
+    const payload = {
+      user_id: 1,
+      blood_pressure: currentBP,
+      heart_rate: Number(currentHR),
+      blood_sugar: Number(currentBS)
+    }
+    await request.post('/api/v1/health', payload)
+    ElMessage.success('健康记录已添加')
+    fetchHealthRecords()
+  } catch (error) {
+    ElMessage.error('添加健康记录失败')
+  }
 }
 
 // 分享给医生
@@ -375,6 +384,7 @@ const shareWithDoctor = () => {
 onMounted(() => {
   updateHealthMetrics() // 立即更新一次
   healthUpdateInterval = setInterval(updateHealthMetrics, 2000)
+  fetchHealthRecords() // 获取健康记录
 })
 
 // 清除定时器
