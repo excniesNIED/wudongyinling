@@ -4,13 +4,18 @@ import { ElMessage } from 'element-plus';
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: 'http://localhost:8000/api/v1', // 后端 API 基础 URL
+  baseURL: '/api', // 使用 Vite 代理
   timeout: 5000 // 请求超时时间
 });
 
 // 请求拦截器
 service.interceptors.request.use(
   config => {
+    // 避免重复前缀 /api/v1
+    if (config.url) {
+      // 全局移除任何重复 /api/v1 前缀
+      config.url = config.url.replace(/^(\/api\/v1)+/, '');
+    }
     // 在发送请求之前做些什么
     const token = localStorage.getItem('user-token');
     if (token) {

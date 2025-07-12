@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
-// 所有管理端请求统一增加 /api/v1 前缀，确保与后端路由保持一致
-const API_PREFIX = '/api/v1'
+// 所有管理端请求统一使用 Vite 代理映射后端 `/api/v1` 前缀
+const API_PREFIX = ''
 
 // 用户相关API
 export const userApi = {

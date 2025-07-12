@@ -52,21 +52,22 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import request from '@/utils/request'
+import { ref, reactive } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/stores/user';
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
+const userStore = useUserStore();
 
-const loading = ref(false)
-const loginFormRef = ref(null)
+const loading = ref(false);
+const loginFormRef = ref(null);
 const loginFormData = reactive({
   username: '',
   password: '',
   remember: false
-})
+});
 
 const rules = {
   username: [
@@ -76,44 +77,37 @@ const rules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 5, message: '密码至少为5个字符', trigger: 'blur' }
   ]
-}
+};
 
 const handleLogin = () => {
-  loginFormRef.value.validate(async valid => {
+  loginFormRef.value.validate(async (valid) => {
     if (!valid) {
       ElMessage.error('请完善表单后重试');
       return;
     }
     loading.value = true;
     try {
-      const response = await request.post('/auth/login', {
+      await userStore.login({
         username: loginFormData.username,
-        password: loginFormData.password
+        password: loginFormData.password,
       });
-      if (response && response.access_token) {
-        localStorage.setItem('user-token', response.access_token);
-        if (response.user) {
-          localStorage.setItem('user-info', JSON.stringify(response.user));
-        }
-        ElMessage.success('登录成功');
-        const redirectPath = route.query.redirect || '/';
-        await router.replace(redirectPath);
-      } else {
-        ElMessage.error('登录失败，请稍后重试');
-      }
+      ElMessage.success('登录成功');
+      const redirectPath = route.query.redirect || '/';
+      await router.replace(redirectPath);
     } catch (error) {
-      console.error('Login failed:', error);
+      // The error message is already handled by the response interceptor in request.js
+      console.error('Login failed in component:', error);
     } finally {
       loading.value = false;
     }
   });
-}
+};
 
 const demoLogin = () => {
-  loginFormData.username = 'admin'
-  loginFormData.password = 'admin'
-  handleLogin()
-}
+  loginFormData.username = 'admin';
+  loginFormData.password = 'admin';
+  handleLogin();
+};
 </script>
 
 <style scoped>
