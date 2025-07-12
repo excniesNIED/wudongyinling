@@ -102,7 +102,7 @@ const courses = ref([])
 
 const fetchCourses = async () => {
   try {
-    courses.value = await request.get('/api/v1/courses', { params: { skip: 0, limit: 4 } })
+    courses.value = await request.get('/courses', { params: { skip: 0, limit: 4 } })
   } catch (error) {
     ElMessage.error('获取热门课程失败')
   }

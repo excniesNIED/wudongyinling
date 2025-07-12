@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from .base import Base
+from ..core.database import Base
 
 # 用户-挑战关联表
 challenge_participants = Table(
@@ -22,7 +22,7 @@ class Challenge(Base):
     end_date = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
-    participants = relationship("app.models.user.User", secondary=challenge_participants, backref="challenges")
+    participants = relationship("User", secondary=challenge_participants, backref="challenges")
 
 class ChallengeRecord(Base):
     __tablename__ = "challenge_records"
@@ -33,5 +33,5 @@ class ChallengeRecord(Base):
     check_in_date = Column(DateTime(timezone=True), server_default=func.now())
     completed = Column(Boolean, default=True)
     
-    user = relationship("app.models.user.User", backref="challenge_records")
+    user = relationship("User", backref="challenge_records")
     challenge = relationship("Challenge", backref="records") 

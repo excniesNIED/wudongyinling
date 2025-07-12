@@ -13,3 +13,4 @@ pydantic==2.5.1
 pydantic-settings==2.1.0
 email-validator==2.1.0.post1 
 pymysql==1.1.1
+bcrypt<4.0.0
