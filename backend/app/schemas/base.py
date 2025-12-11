@@ -19,7 +19,7 @@ class BaseAPIResponse(BaseModel):
 
 class DataResponse(BaseAPIResponse, Generic[T]):
     """单个数据响应格式"""
-    data: T = Field(description="响应数据")
+    data: Optional[T] = Field(default=None, description="响应数据")
 
 class ListResponse(BaseAPIResponse, Generic[T]):
     """列表数据响应格式"""

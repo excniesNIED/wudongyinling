@@ -89,7 +89,7 @@ export const courseApi = {
    * @param params 查询参数
    */
   getCourses(params?: CourseParams) {
-    return request.get<{items: Course[], total: number}>('/courses', params)
+    return request.get<{items: Course[], total: number}>('/v1/courses', params)
   },
 
   /**
@@ -97,7 +97,7 @@ export const courseApi = {
    * @param id 课程ID
    */
   getCourseById(id: number) {
-    return request.get<Course>(`/courses/${id}`)
+    return request.get<Course>(`/v1/courses/${id}`)
   },
 
   /**
@@ -105,7 +105,7 @@ export const courseApi = {
    * @param data 课程数据
    */
   createCourse(data: Partial<Course>) {
-    return request.post<Course>('/courses', data)
+    return request.post<Course>('/v1/courses', data)
   },
 
   /**
@@ -114,7 +114,7 @@ export const courseApi = {
    * @param data 课程数据
    */
   updateCourse(id: number, data: Partial<Course>) {
-    return request.put<Course>(`/courses/${id}`, data)
+    return request.put<Course>(`/v1/courses/${id}`, data)
   },
 
   /**
@@ -122,7 +122,7 @@ export const courseApi = {
    * @param id 课程ID
    */
   deleteCourse(id: number) {
-    return request.delete(`/courses/${id}`)
+    return request.delete(`/v1/courses/${id}`)
   },
 
   /**
@@ -130,7 +130,7 @@ export const courseApi = {
    * @param courseId 课程ID
    */
   getCourseComments(courseId: number) {
-    return request.get<CourseComment[]>(`/courses/${courseId}/comments`)
+    return request.get<CourseComment[]>(`/v1/courses/${courseId}/comments`)
   },
 
   /**
@@ -139,7 +139,7 @@ export const courseApi = {
    * @param data 评论数据
    */
   submitCourseComment(courseId: number, data: CourseCommentParams) {
-    return request.post<CourseComment>(`/courses/${courseId}/comments`, data)
+    return request.post<CourseComment>(`/v1/courses/${courseId}/comments`, data)
   },
 
   /**
@@ -147,7 +147,7 @@ export const courseApi = {
    * @param data 报名数据
    */
   enrollCourse(data: CourseEnrollParams) {
-    return request.post<{success: boolean}>(`/courses/${data.course_id}/enroll`, data)
+    return request.post<{success: boolean}>(`/v1/courses/${data.course_id}/enroll`, data)
   },
 
   /**
@@ -155,7 +155,7 @@ export const courseApi = {
    * @param userId 用户ID，不传则获取当前登录用户
    */
   getUserCourses(userId?: number) {
-    const url = userId ? `/courses/user/${userId}` : '/courses/user/me'
+    const url = userId ? `/v1/courses/user/${userId}` : '/v1/courses/user/me'
     return request.get<Course[]>(url)
   },
 
@@ -164,7 +164,7 @@ export const courseApi = {
    * @param limit 限制数量
    */
   getRecommendedCourses(limit: number = 5) {
-    return request.get<Course[]>('/courses/recommended', { limit })
+    return request.get<Course[]>('/v1/courses/recommended', { limit })
   },
 
   /**
@@ -172,7 +172,7 @@ export const courseApi = {
    * @param limit 限制数量
    */
   getPopularCourses(limit: number = 5) {
-    return request.get<Course[]>('/courses/popular', { limit })
+    return request.get<Course[]>('/v1/courses/popular', { limit })
   },
 
   /**
@@ -181,14 +181,14 @@ export const courseApi = {
    * @param formData 包含图片的FormData
    */
   updateCourseCover(id: number, formData: FormData) {
-    return request.post<{cover_url: string}>(`/courses/${id}/cover`, formData)
+    return request.post<{cover_url: string}>(`/v1/courses/${id}/cover`, formData)
   },
 
   /**
    * 获取课程分类列表
    */
   getCourseCategories() {
-    return request.get<CourseCategory[]>('/courses/categories', undefined, {
+    return request.get<CourseCategory[]>('/v1/courses/categories', undefined, {
       showError: false,
       retry: false,
       loading: false,
@@ -200,7 +200,7 @@ export const courseApi = {
    * 获取课程难度列表
    */
   getCourseDifficulties() {
-    return request.get<CourseDifficulty[]>('/courses/difficulties', undefined, {
+    return request.get<CourseDifficulty[]>('/v1/courses/difficulties', undefined, {
       showError: false,
       retry: false,
       loading: false,
@@ -212,7 +212,7 @@ export const courseApi = {
    * 获取课程时长范围列表
    */
   getCourseDurations() {
-    return request.get<CourseDuration[]>('/courses/durations', undefined, {
+    return request.get<CourseDuration[]>('/v1/courses/durations', undefined, {
       showError: false,
       retry: false,
       loading: false,
