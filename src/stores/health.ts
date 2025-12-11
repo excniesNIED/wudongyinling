@@ -80,7 +80,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<HealthRecord[]>('/health')
+        const data = await request.get<HealthRecord[]>('/v1/health')
         this.healthData = data
         return data
       } catch (error: any) {
@@ -97,7 +97,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<HealthRecord>(`/health/${id}`)
+        const data = await request.get<HealthRecord>(`/v1/health/${id}`)
         this.currentHealthRecord = data
         return data
       } catch (error: any) {
@@ -114,7 +114,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.post<HealthRecord>('/health', record)
+        const data = await request.post<HealthRecord>('/v1/health', record)
         this.healthData.push(data)
         ElMessage.success('健康数据添加成功')
         return data
@@ -132,7 +132,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.put<HealthRecord>(`/health/${id}`, record)
+        const data = await request.put<HealthRecord>(`/v1/health/${id}`, record)
         const index = this.healthData.findIndex(item => item.id === id)
         if (index !== -1) {
           this.healthData[index] = data
@@ -153,7 +153,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Prescription[]>('/prescriptions')
+        const data = await request.get<Prescription[]>('/v1/prescriptions')
         this.prescriptions = data
         return data
       } catch (error: any) {
@@ -170,7 +170,7 @@ export const useHealthStore = defineStore('health', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Prescription>(`/prescriptions/${id}`)
+        const data = await request.get<Prescription>(`/v1/prescriptions/${id}`)
         this.currentPrescription = data
         return data
       } catch (error: any) {
