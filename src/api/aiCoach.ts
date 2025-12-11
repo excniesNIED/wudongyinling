@@ -38,6 +38,7 @@ export interface ChatSession {
 
 /**
  * AI教练相关API
+ * 注意：所有路径需要以/v1开头以匹配后端路由
  */
 export const aiCoachApi = {
   /**
@@ -45,7 +46,7 @@ export const aiCoachApi = {
    * @param formData 包含视频文件的FormData
    */
   analyzeDance(formData: FormData) {
-    return request.post<AIAnalysisResult>('/ai/analyze', formData)
+    return request.post<AIAnalysisResult>('/v1/ai-analysis/analyze', formData)
   },
   
   /**
@@ -53,7 +54,7 @@ export const aiCoachApi = {
    * @param question 用户问题
    */
   getAIAdvice(question: string) {
-    return request.post<AIAdvice>('/ai/coach-advice', { question })
+    return request.post<AIAdvice>('/v1/ai-analysis/coach-advice', { question })
   },
   
   /**
@@ -61,7 +62,7 @@ export const aiCoachApi = {
    * @param params 查询参数
    */
   getAnalysisHistory(params?: { skip?: number, limit?: number }) {
-    return request.get<{ items: AIAnalysisResult[], total: number }>('/ai/analysis-history', params)
+    return request.get<{ items: AIAnalysisResult[], total: number }>('/v1/ai-analysis/history', params)
   },
   
   /**
@@ -69,7 +70,7 @@ export const aiCoachApi = {
    * @param id 分析结果ID
    */
   getAnalysisById(id: number) {
-    return request.get<AIAnalysisResult>(`/ai/analysis/${id}`)
+    return request.get<AIAnalysisResult>(`/v1/ai-analysis/${id}`)
   },
   
   /**
@@ -78,21 +79,21 @@ export const aiCoachApi = {
    * @param days 统计天数
    */
   analyzeHealthData(userId: number, days: number = 30) {
-    return request.post<any>(`/ai/health-analysis/${userId}`, { days })
+    return request.post<any>(`/v1/ai-analysis/health/${userId}`, { days })
   },
   
   /**
    * 获取聊天会话列表
    */
   getChatSessions() {
-    return request.get<ChatSession[]>('/chat/sessions')
+    return request.get<ChatSession[]>('/v1/chat/sessions')
   },
   
   /**
    * 创建新的聊天会话
    */
   createChatSession(title: string = '新会话') {
-    return request.post<ChatSession>('/chat/sessions', { title })
+    return request.post<ChatSession>('/v1/chat/sessions', { title })
   },
   
   /**
@@ -100,7 +101,7 @@ export const aiCoachApi = {
    * @param sessionId 会话ID
    */
   getChatMessages(sessionId: number) {
-    return request.get<ChatMessage[]>(`/chat/sessions/${sessionId}/messages`)
+    return request.get<ChatMessage[]>(`/v1/chat/sessions/${sessionId}/messages`)
   },
   
   /**
@@ -109,7 +110,7 @@ export const aiCoachApi = {
    * @param content 消息内容
    */
   sendChatMessage(sessionId: number, content: string) {
-    return request.post<ChatMessage>(`/chat/sessions/${sessionId}/messages`, { content })
+    return request.post<ChatMessage>(`/v1/chat/sessions/${sessionId}/messages`, { content })
   },
   
   /**
@@ -117,6 +118,6 @@ export const aiCoachApi = {
    * @param sessionId 会话ID
    */
   deleteChatSession(sessionId: number) {
-    return request.delete(`/chat/sessions/${sessionId}`)
+    return request.delete(`/v1/chat/sessions/${sessionId}`)
   }
 } 
