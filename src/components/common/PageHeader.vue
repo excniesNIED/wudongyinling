@@ -147,7 +147,9 @@ const breadcrumbs = computed(() => {
 
 <style scoped>
 .page-header {
-  @apply py-8 mb-8 bg-gradient-to-r from-blue-50 to-indigo-50;
+  @apply py-8 mb-8;
+  /* 使用金黄色主题替代蓝色，与整体风格一致 */
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(205, 133, 63, 0.15) 100%);
   min-height: 120px;
   display: flex;
   align-items: center;
@@ -175,7 +177,9 @@ const breadcrumbs = computed(() => {
 }
 
 :deep(.el-breadcrumb__item.is-current) {
-  @apply text-blue-600 font-medium;
+  @apply font-medium;
+  /* 使用金黄色主题替代蓝色 */
+  color: var(--primary-color, #d4af37);
 }
 
 .header-content {
@@ -191,7 +195,9 @@ const breadcrumbs = computed(() => {
 }
 
 .page-title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-2 sm:mb-4;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4;
+  /* 使用金黄色主题替代蓝色 */
+  color: var(--primary-color, #d4af37);
   line-height: 1.2;
   word-break: break-word;
 }
