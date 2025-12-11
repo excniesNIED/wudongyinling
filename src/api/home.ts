@@ -39,20 +39,21 @@ export interface HomeInfo {
 
 /**
  * 首页相关API
+ * 注意：request.ts已设置baseURL为/api/v1，因此路径需要以/v1开头
  */
 export const homeApi = {
   /**
    * 获取首页数据
    */
   getHomeInfo() {
-    return request.get<HomeInfo>('/home')
+    return request.get<HomeInfo>('/v1/home')
   },
   
   /**
    * 获取轮播图列表
    */
   getBanners() {
-    return request.get<Banner[]>('/home/banners')
+    return request.get<Banner[]>('/v1/home/banners')
   },
   
   /**
@@ -60,7 +61,7 @@ export const homeApi = {
    * @param limit 限制数量
    */
   getRecommendedCourses(limit: number = 6) {
-    return request.get<Course[]>('/courses/recommended', { limit })
+    return request.get<Course[]>('/v1/courses/recommended', { limit })
   },
   
   /**
@@ -68,13 +69,13 @@ export const homeApi = {
    * @param limit 限制数量
    */
   getLatestNews(limit: number = 3) {
-    return request.get<News[]>('/news/latest', { limit })
+    return request.get<News[]>('/v1/home/news/latest', { limit })
   },
   
   /**
    * 获取首页统计数据
    */
   getHomeStats() {
-    return request.get<HomeInfo['stats']>('/home/stats')
+    return request.get<HomeInfo['stats']>('/v1/home/stats')
   }
 } 
