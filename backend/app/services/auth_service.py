@@ -175,9 +175,40 @@ class AuthService:
         # 哈希密码
         hashed_password = self.get_password_hash(user_in.password)
         
-        # 创建用户
+        # 准备用户数据
         user_data = user_in.model_dump(exclude={"password"})
         user_data["hashed_password"] = hashed_password
         
-        user = await user_repository.create(db, obj_in=UserUpdate(**user_data))
+        # 确保role和is_admin字段的一致性
+        from ..models.user import UserRole
+        if hasattr(user_in, 'role') and user_in.role:
+            user_data['role'] = user_in.role
+            user_data['is_admin'] = (user_in.role == UserRole.ADMIN)
+        else:
+            if getattr(user_in, 'is_admin', False):
+                user_data['role'] = UserRole.ADMIN
+            else:
+                user_data['role'] = UserRole.ELDERLY
+        
+        # 生成唯一用户ID
+        import time
+        import random
+        prefix_map = {
+            UserRole.ELDERLY: 'E',
+            UserRole.CHILD: 'C',
+            UserRole.VOLUNTEER: 'V',
+            UserRole.TEACHER: 'T',
+            UserRole.DOCTOR: 'D',
+            UserRole.ADMIN: 'A'
+        }
+        prefix = prefix_map.get(user_data['role'], 'E')
+        timestamp = str(int(time.time()))[-6:]
+        random_num = str(random.randint(100, 999))
+        user_data['unique_id'] = f"{prefix}{timestamp}{random_num}"
+        
+        # 直接使用User模型创建用户，而非通过repository
+        user = User(**user_data)
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
         return user 
