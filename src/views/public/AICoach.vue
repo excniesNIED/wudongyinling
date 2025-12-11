@@ -483,12 +483,17 @@ updateScores()
 </template>
 
 <style scoped>
-.ai-coach {
+/* AICoach页面主样式 */
+.ai-coach-page {
   padding: 20px;
-  padding-bottom: 40px;
-  margin-bottom: 60px;
+  padding-bottom: 100px; /* 为底部导航添加安全区域 */
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.ai-coach-page.page-with-nav {
+  /* 确保与顶部导航栏有正确间距 */
+  padding-top: 20px;
 }
 
 .video-container {
