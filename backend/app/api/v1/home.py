@@ -12,11 +12,10 @@ router = APIRouter()
 
 @router.get("/", response_model=DataResponse[Dict[str, Any]])
 async def get_home_data(
-    db: AsyncSession = Depends(get_async_db),
-    current_user: User = Depends(get_current_active_user)
+    db: AsyncSession = Depends(get_async_db)
 ):
     """
-    获取首页数据
+    获取首页数据（无需认证，所有用户可访问）
     """
     home_data = {
         "hero": {
@@ -103,11 +102,9 @@ async def get_home_data(
     return DataResponse(data=home_data, message="获取首页数据成功")
 
 @router.get("/banners", response_model=DataResponse[List[Dict[str, Any]]])
-async def get_home_banners(
-    current_user: User = Depends(get_current_active_user)
-):
+async def get_home_banners():
     """
-    获取首页轮播图
+    获取首页轮播图（无需认证，所有用户可访问）
     """
     banners = [
         {
@@ -140,11 +137,10 @@ async def get_home_banners(
 
 @router.get("/stats", response_model=DataResponse[Dict[str, Any]])
 async def get_home_stats(
-    db: AsyncSession = Depends(get_async_db),
-    current_user: User = Depends(get_current_active_user)
+    db: AsyncSession = Depends(get_async_db)
 ):
     """
-    获取首页统计数据
+    获取首页统计数据（无需认证，所有用户可访问）
     """
     # 这里可以从数据库获取实时统计数据
     stats = {
@@ -170,11 +166,10 @@ async def get_home_stats(
 @router.get("/news/latest", response_model=DataResponse[List[Dict[str, Any]]])
 async def get_latest_news(
     limit: int = Query(5, ge=1, le=20),
-    db: AsyncSession = Depends(get_async_db),
-    current_user: User = Depends(get_current_active_user)
+    db: AsyncSession = Depends(get_async_db)
 ):
     """
-    获取最新新闻列表
+    获取最新新闻列表（无需认证，所有用户可访问）
     """
     # 这里可以从数据库获取新闻数据
     news = [
