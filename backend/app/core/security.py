@@ -41,11 +41,14 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        # JWT中的sub字段是字符串类型，需要转换为int
+        sub = payload.get("sub")
+        if sub is None:
             raise credentials_exception
+        user_id: int = int(sub)
         token_data = {"sub": user_id}
-    except JWTError:
+    except (JWTError, ValueError, TypeError):
+        # ValueError/TypeError: sub无法转换为int
         raise credentials_exception
     
     from ..services import user_service  # 避免循环导入
