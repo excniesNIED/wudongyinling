@@ -337,7 +337,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         
         return f"{prefix}{timestamp}{random_num}"
 
-    async def get_active_users(self, db: AsyncSession, since_date) -> List[User]:
+    async def get_active_users_since(self, db: AsyncSession, since_date: date) -> List[User]:
         """
         获取指定日期以来的活跃用户
         
