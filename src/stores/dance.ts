@@ -40,7 +40,7 @@ export const useDanceStore = defineStore('dance', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Course[]>('/courses')
+        const data = await request.get<Course[]>('/v1/courses')
         this.courses = data
         return data
       } catch (error: any) {
@@ -57,7 +57,7 @@ export const useDanceStore = defineStore('dance', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Course>(`/courses/${id}`)
+        const data = await request.get<Course>(`/v1/courses/${id}`)
         this.currentCourse = data
         // 更新课程列表中的对应项
         const index = this.courses.findIndex(c => c.id === id)
@@ -79,7 +79,7 @@ export const useDanceStore = defineStore('dance', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Course[]>('/courses/favorites')
+        const data = await request.get<Course[]>('/v1/courses/favorites')
         this.favorites = data.map(course => course.id)
         return data
       } catch (error: any) {
@@ -96,11 +96,11 @@ export const useDanceStore = defineStore('dance', {
       try {
         const isFavorite = this.favorites.includes(courseId)
         if (isFavorite) {
-          await request.delete<{ success: boolean }>(`/courses/${courseId}/favorite`)
+          await request.delete<{ success: boolean }>(`/v1/courses/${courseId}/favorite`)
           this.favorites = this.favorites.filter(id => id !== courseId)
           ElMessage.success('已取消收藏')
         } else {
-          await request.post<{ success: boolean }>(`/courses/${courseId}/favorite`)
+          await request.post<{ success: boolean }>(`/v1/courses/${courseId}/favorite`)
           this.favorites.push(courseId)
           ElMessage.success('已收藏课程')
         }
@@ -114,7 +114,7 @@ export const useDanceStore = defineStore('dance', {
     // 更新课程进度
     async updateProgress(courseId: number, progress: number) {
       try {
-        await request.post<CourseProgress>(`/courses/${courseId}/progress`, { progress })
+        await request.post<CourseProgress>(`/v1/courses/${courseId}/progress`, { progress })
         this.progress[courseId] = progress
         return progress
       } catch (error: any) {
@@ -128,7 +128,7 @@ export const useDanceStore = defineStore('dance', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<CourseProgress[]>('/courses/progress')
+        const data = await request.get<CourseProgress[]>('/v1/courses/progress')
         this.progress = data.reduce((acc, item) => {
           acc[item.courseId] = item.progress
           return acc
