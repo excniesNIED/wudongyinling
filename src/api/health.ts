@@ -125,7 +125,7 @@ export const healthApi = {
    * @param days 统计天数
    */
   getHealthStatistics(userId: number, days: number = 30) {
-    return request.get(`/v1/health/statistics/${userId}`, { params: { days } })
+    return request.get(`/v1/health/statistics/${userId}`, { days })
   },
   
   /**
