@@ -78,7 +78,7 @@ export const useSocialStore = defineStore('social', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Feed[]>('/social/feeds', params)
+        const data = await request.get<Feed[]>('/v1/social/feeds', params)
         this.feeds = data
         return data
       } catch (error: any) {
@@ -95,7 +95,7 @@ export const useSocialStore = defineStore('social', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Feed>(`/social/feeds/${id}`)
+        const data = await request.get<Feed>(`/v1/social/feeds/${id}`)
         this.currentFeed = data
         // 更新列表中的动态
         const index = this.feeds.findIndex(feed => feed.id === id)
@@ -117,7 +117,7 @@ export const useSocialStore = defineStore('social', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.post<Feed>('/social/feeds', feed)
+        const data = await request.post<Feed>('/v1/social/feeds', feed)
         this.feeds.unshift(data)
         ElMessage.success('发布成功')
         return data
@@ -137,7 +137,7 @@ export const useSocialStore = defineStore('social', {
         if (!feed) return false
         
         const isLiked = feed.isLiked
-        const data = await request.post<{ likes: number }>(`/social/feeds/${feedId}/like`, { action: isLiked ? 'unlike' : 'like' })
+        const data = await request.post<{ likes: number }>(`/v1/social/feeds/${feedId}/like`, { action: isLiked ? 'unlike' : 'like' })
         
         // 更新动态
         const index = this.feeds.findIndex(f => f.id === feedId)
@@ -162,7 +162,7 @@ export const useSocialStore = defineStore('social', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.get<Comment[]>(`/social/feeds/${feedId}/comments`)
+        const data = await request.get<Comment[]>(`/v1/social/feeds/${feedId}/comments`)
         this.comments = { ...this.comments, [feedId]: data }
         return data
       } catch (error: any) {
@@ -179,7 +179,7 @@ export const useSocialStore = defineStore('social', {
       try {
         this.loading = true
         this.error = null
-        const data = await request.post<Comment>(`/social/feeds/${feedId}/comments`, { content })
+        const data = await request.post<Comment>(`/v1/social/feeds/${feedId}/comments`, { content })
         
         // 更新评论列表
         if (!this.comments[feedId]) {
