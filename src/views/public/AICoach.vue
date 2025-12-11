@@ -582,7 +582,7 @@ updateScores()
     height: 300px;
   }
   
-  .ai-coach {
+  .ai-coach-page {
     margin-bottom: 60px;
   }
 }
