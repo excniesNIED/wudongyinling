@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                                                                                                       import request from '@/utils/request'
+import { request } from '@/utils/request'
 
 // 动态广场相关接口
 export interface Post {
@@ -120,7 +120,7 @@ export const postApi = {
     is_public?: boolean
     is_featured?: boolean
   }) => {
-    return request.get('/v1/social/posts', { params })
+    return request.get('/v1/social/posts', params)
   },
 
   // 创建动态
@@ -148,7 +148,7 @@ export const postApi = {
     page?: number
     page_size?: number
   }) => {
-    return request.get(`/v1/social/posts/${postId}/comments`, { params })
+    return request.get(`/v1/social/posts/${postId}/comments`, params)
   },
 
   // 添加评论
@@ -181,7 +181,7 @@ export const postApi = {
     page?: number
     page_size?: number
   }) => {
-    return request.get(`/v1/social/users/${userId}/posts`, { params })
+    return request.get(`/v1/social/users/${userId}/posts`, params)
   },
 
   // 获取关注用户的动态
@@ -189,7 +189,7 @@ export const postApi = {
     page?: number
     page_size?: number
   }) => {
-    return request.get('/v1/social/following/posts', { params })
+    return request.get('/v1/social/following/posts', params)
   },
 
   // 获取热门动态
@@ -198,7 +198,7 @@ export const postApi = {
     page_size?: number
     timeframe?: 'day' | 'week' | 'month'
   }) => {
-    return request.get('/v1/social/posts/trending', { params })
+    return request.get('/v1/social/posts/trending', params)
   },
 
   // 非遗传承相关接口
@@ -209,7 +209,7 @@ export const postApi = {
     category?: string
     region?: string
   }) => {
-    return request.get('/v1/social/heritage/projects', { params })
+    return request.get('/v1/social/heritage/projects', params)
   },
 
   // 获取项目详情
@@ -239,7 +239,7 @@ export const postApi = {
     project_id?: number
     region?: string
   }) => {
-    return request.get('/v1/social/heritage/inheritors', { params })
+    return request.get('/v1/social/heritage/inheritors', params)
   },
 
   // 获取传承人详情
@@ -271,4 +271,7 @@ export const postApi = {
   leaveHeritageProject: (projectId: number, userId: number) => {
     return request.post(`/v1/social/heritage/projects/${projectId}/leave`, { user_id: userId })
   }
-} 
+}
+
+// 导出socialApi别名，保持与其他API模块的一致性
+export const socialApi = postApi 
