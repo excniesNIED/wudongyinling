@@ -88,28 +88,28 @@ export const statsApi = {
    * 获取仪表盘统计数据
    */
   getDashboardStats() {
-    return request.get<DashboardStats>('/stats/dashboard')
+    return request.get<DashboardStats>('/v1/stats/dashboard')
   },
 
   /**
    * 获取用户统计数据
    */
   getUserStats() {
-    return request.get<UserStats>('/stats/users')
+    return request.get<UserStats>('/v1/stats/users')
   },
 
   /**
    * 获取课程统计数据
    */
   getCourseStats() {
-    return request.get<CourseStats>('/stats/courses')
+    return request.get<CourseStats>('/v1/stats/courses')
   },
 
   /**
    * 获取挑战统计数据
    */
   getChallengeStats() {
-    return request.get<ChallengeStats>('/stats/challenges')
+    return request.get<ChallengeStats>('/v1/stats/challenges')
   },
   
   /**
@@ -118,7 +118,7 @@ export const statsApi = {
    * @param days 统计天数
    */
   getUserHealthStats(userId: number, days: number = 30) {
-    return request.get<HealthStats>(`/stats/user/${userId}`, { days })
+    return request.get<HealthStats>(`/v1/stats/user/${userId}`, { days })
   },
   
   /**
@@ -126,6 +126,6 @@ export const statsApi = {
    * @param userId 用户ID
    */
   getUserActivityStats(userId: number) {
-    return request.get<any>(`/stats/user/${userId}/activity`)
+    return request.get<any>(`/v1/stats/user/${userId}/activity`)
   }
 } 
