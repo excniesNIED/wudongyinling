@@ -731,9 +731,9 @@ const viewProjectDetail = (project: HeritageProject) => {
         <ElRow :gutter="20">
           <ElCol :xs="24" :sm="12" :md="8" :lg="8" v-for="project in heritageProjects" :key="project.id">
             <div class="heritage-card">
-              <ElImage :src="project.image_url" fit="cover" class="heritage-image" />
+              <ElImage :src="project.cover_image || project.image_url || '/images/default-heritage.png'" fit="cover" class="heritage-image" />
               <div class="heritage-overlay">
-                <h4>{{ project.title }}</h4>
+                <h4>{{ project.name || project.title }}</h4>
                 <p>{{ project.description }}</p>
               </div>
               <div class="project-actions">
