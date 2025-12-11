@@ -291,6 +291,21 @@ async def enroll_course(
     )
 
 # 用户课程相关接口
+# 注意：/user/me 必须在 /user/{user_id} 之前定义，否则 "me" 会被当作 user_id 解析
+@router.get("/user/me", response_model=DataResponse[List[CoursePublic]])
+async def get_my_courses(
+    db: AsyncSession = Depends(get_async_db),
+    current_user = Depends(get_current_active_user),
+    course_service: CourseService = Depends()
+):
+    """
+    获取当前用户的课程
+    """
+    # 这里需要实现用户课程查询逻辑
+    user_courses = []
+    
+    return DataResponse(data=user_courses, message="获取我的课程成功")
+
 @router.get("/user/{user_id}", response_model=DataResponse[List[CoursePublic]])
 async def get_user_courses(
     user_id: int,
@@ -305,20 +320,6 @@ async def get_user_courses(
     user_courses = []
     
     return DataResponse(data=user_courses, message="获取用户课程成功")
-
-@router.get("/user/me", response_model=DataResponse[List[CoursePublic]])
-async def get_my_courses(
-    db: AsyncSession = Depends(get_async_db),
-    current_user = Depends(get_current_active_user),
-    course_service: CourseService = Depends()
-):
-    """
-    获取当前用户的课程
-    """
-    # 这里需要实现用户课程查询逻辑
-    user_courses = []
-    
-    return DataResponse(data=user_courses, message="获取我的课程成功")
 
 # 课程推荐接口
 @router.get("/recommended", response_model=DataResponse[List[CoursePublic]])
