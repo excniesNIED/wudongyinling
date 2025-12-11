@@ -87,7 +87,7 @@ export const userApi = {
    * @param params 查询参数
    */
   getUsers(params?: UserQueryParams) {
-    return request.get<PaginatedResult<UserData>>('/users', params)
+    return request.get<PaginatedResult<UserData>>('/v1/users', params)
   },
 
   /**
@@ -95,14 +95,14 @@ export const userApi = {
    * @param id 用户ID
    */
   getUserById(id: number) {
-    return request.get<UserData>(`/users/${id}`)
+    return request.get<UserData>(`/v1/users/${id}`)
   },
 
   /**
    * 获取当前用户信息
    */
   getCurrentUser() {
-    return request.get<UserData>('/users/me')
+    return request.get<UserData>('/v1/users/me')
   },
 
   /**
@@ -110,7 +110,7 @@ export const userApi = {
    * @param data 用户数据
    */
   createUser(data: RegisterParams) {
-    return request.post<UserData>('/users', data)
+    return request.post<UserData>('/v1/users', data)
   },
 
   /**
@@ -119,7 +119,7 @@ export const userApi = {
    * @param data 用户数据
    */
   updateUser(id: number, data: Partial<UserData>) {
-    return request.put<UserData>(`/users/${id}`, data)
+    return request.put<UserData>(`/v1/users/${id}`, data)
   },
 
   /**
@@ -127,7 +127,7 @@ export const userApi = {
    * @param id 用户ID
    */
   deleteUser(id: number) {
-    return request.delete(`/users/${id}`)
+    return request.delete(`/v1/users/${id}`)
   },
 
   /**
@@ -136,7 +136,7 @@ export const userApi = {
    * @param data 密码数据
    */
   changePassword(id: number, data: { old_password: string, new_password: string }) {
-    return request.put(`/users/${id}/password`, data)
+    return request.put(`/v1/users/${id}/password`, data)
   },
 
   /**
@@ -145,7 +145,7 @@ export const userApi = {
    * @param data 新密码
    */
   resetPassword(id: number, data: { password: string }) {
-    return request.put(`/users/${id}/reset-password`, data)
+    return request.put(`/v1/users/${id}/reset-password`, data)
   },
 
   /**
@@ -154,6 +154,6 @@ export const userApi = {
    * @param formData 包含头像文件的FormData
    */
   uploadAvatar(id: number, formData: FormData) {
-    return request.post<{avatar_url: string}>(`/users/${id}/avatar`, formData)
+    return request.post<{avatar_url: string}>(`/v1/users/${id}/avatar`, formData)
   }
 } 
