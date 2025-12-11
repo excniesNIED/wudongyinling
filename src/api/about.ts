@@ -67,35 +67,35 @@ export const aboutApi = {
    * 获取关于我们页面信息
    */
   getAboutInfo() {
-    return request.get<AboutInfo>('/about')
+    return request.get<AboutInfo>('/v1/about')
   },
   
   /**
    * 获取团队成员列表
    */
   getTeamMembers() {
-    return request.get<TeamMember[]>('/about/team')
+    return request.get<TeamMember[]>('/v1/about/team')
   },
   
   /**
    * 获取合作伙伴列表
    */
   getPartners() {
-    return request.get<Partner[]>('/about/partners')
+    return request.get<Partner[]>('/v1/about/partners')
   },
   
   /**
    * 获取企业荣誉列表
    */
   getAwards() {
-    return request.get<Award[]>('/about/awards')
+    return request.get<Award[]>('/v1/about/awards')
   },
   
   /**
    * 获取发展历程
    */
   getMilestones() {
-    return request.get<Milestone[]>('/about/milestones')
+    return request.get<Milestone[]>('/v1/about/milestones')
   },
   
   /**
@@ -108,6 +108,6 @@ export const aboutApi = {
     subject?: string
     message: string
   }) {
-    return request.post('/contact', data)
+    return request.post('/v1/contact', data)
   }
 } 
