@@ -341,9 +341,40 @@ onMounted(() => {
   color: #666;
 }
 
+/* 平板响应式 */
+@media (max-width: 992px) {
+  .about-page {
+    padding: 20px 15px 100px 15px; /* 底部导航安全区域 */
+  }
+
+  .mission-vision :deep(.el-col) {
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  }
+
+  .team-section :deep(.el-col) {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-bottom: 20px;
+  }
+
+  .contact-section :deep(.el-col) {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-bottom: 20px;
+  }
+}
+
+/* 手机响应式 */
 @media (max-width: 768px) {
+  .about-page {
+    padding: 15px 10px 100px 10px;
+  }
+
   .page-title {
-    font-size: 28px;
+    font-size: 24px;
+    margin: 30px 0 20px;
   }
 
   .about-section h2,
@@ -352,19 +383,153 @@ onMounted(() => {
   .team-section h2,
   .partners-section h2,
   .contact-section h2 {
-    font-size: 24px;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .about-section p {
+    font-size: 15px;
+    margin-bottom: 15px;
+  }
+
+  .team-section :deep(.el-col) {
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin-bottom: 25px;
+  }
+
+  .member-photo {
+    width: 120px !important;
+    height: 120px !important;
   }
 
   .member-name {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .member-title {
-    font-size: 18px;
+    font-size: 15px;
   }
 
   .member-bio {
+    font-size: 14px;
+  }
+
+  .partners-logos {
+    gap: 20px;
+  }
+
+  .partner-logo {
+    width: 100px;
+    height: 70px;
+  }
+
+  .contact-section :deep(.el-col) {
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin-bottom: 15px;
+  }
+
+  .contact-item {
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .contact-icon {
+    margin: 0 auto;
+  }
+
+  .contact-text {
+    text-align: center;
+  }
+
+  .contact-text h3 {
+    font-size: 16px;
+  }
+
+  .contact-text p {
+    font-size: 14px;
+  }
+}
+
+/* 小屏手机响应式 */
+@media (max-width: 576px) {
+  .about-page {
+    padding: 10px 8px 100px 8px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    margin: 25px 0 15px;
+  }
+
+  .about-section,
+  .mission-vision,
+  .team-section,
+  .partners-section,
+  .contact-section {
+    margin-bottom: 25px;
+  }
+
+  .about-section h2,
+  .mission h2,
+  .vision h2,
+  .team-section h2,
+  .partners-section h2,
+  .contact-section h2 {
     font-size: 18px;
+  }
+
+  .about-section p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .member-photo {
+    width: 100px !important;
+    height: 100px !important;
+    border-width: 3px;
+  }
+
+  .member-name {
+    font-size: 16px;
+  }
+
+  .member-title {
+    font-size: 14px;
+  }
+
+  .member-bio {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .partner-logo {
+    width: 80px;
+    height: 55px;
+  }
+
+  .partners-logos {
+    gap: 15px;
+  }
+
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contact-icon .el-icon {
+    font-size: 18px !important;
+  }
+
+  .contact-text h3 {
+    font-size: 15px;
+  }
+
+  .contact-text p {
+    font-size: 13px;
   }
 }
 </style> 
