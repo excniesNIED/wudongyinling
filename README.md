@@ -143,3 +143,28 @@ VITE_APP_TITLE=舞动银龄 (开发)
 VITE_API_BASE_URL=/api
 VITE_APP_TITLE=舞动银龄
 ```
+
+## 更新日志
+
+### v1.1.0 (2024-12-11)
+
+**Bug 修复**
+
+- 🔧 **后端**: 修复JWT类型转换、用户注册、重复方法定义等10个后端问题
+- 🌐 **前端API**: 统一所有API路径添加`/v1`前缀，修复request导入和params传递
+- 🎨 **UI**: PageHeader组件配色统一为金色主题，About页面添加完整响应式样式
+- 📱 **响应式**: 优化AICoach、SocialPlatform等页面的移动端布局
+
+**详细修复列表**
+
+| 类型 | 文件 | 修复内容 |
+|------|------|----------|
+| 后端 | `security.py` | JWT sub claim正确转换为int |
+| 后端 | `auth_service.py` | 用户注册改用User模型 |
+| 后端 | `home.py` | 移除首页API认证要求 |
+| 后端 | `base.py` | DataResponse.data改为Optional |
+| 后端 | `user.py` | 手机验证使用re.match |
+| 前端 | `social.ts/home.ts/aiCoach.ts` | 统一API路径和导入 |
+| 前端 | `stores/*.ts` | 添加/v1前缀 |
+| UI | `PageHeader.vue` | 蓝色改金色主题 |
+| UI | `About.vue` | 完整响应式样式 |
