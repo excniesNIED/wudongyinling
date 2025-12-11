@@ -262,6 +262,17 @@ class HeritageProjectService(BaseService[HeritageProject, HeritageProjectCreate,
                 raise
 
 
+class PostLikeService:
+    """动态点赞服务"""
+    
+    def __init__(self):
+        self.repository = PostLikeRepository()
+    
+    async def get_by_user_id(self, db: AsyncSession, user_id: int) -> List[PostLike]:
+        """获取用户的所有点赞"""
+        return await self.repository.get_likes_by_user(db, user_id)
+
+
 class HeritageInheritorService(BaseService[HeritageInheritor, HeritageInheritorCreate, HeritageInheritorUpdate]):
     """传承人服务"""
     
