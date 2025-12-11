@@ -1,4 +1,5 @@
 from typing import List, Optional, Dict, Any, Union
+from datetime import date
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 
