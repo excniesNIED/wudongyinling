@@ -352,6 +352,7 @@ async def toggle_heritage_project_status(
 ):
     """
     切换非遗项目启用状态
+    注意：toggle_status方法内部管理数据库会话
     """
     project = await project_service.toggle_status(project_id)
     if not project:
@@ -464,6 +465,7 @@ async def toggle_heritage_inheritor_status(
 ):
     """
     切换非遗传承人启用状态
+    注意：toggle_status方法内部管理数据库会话
     """
     inheritor = await inheritor_service.toggle_status(inheritor_id)
     if not inheritor:
