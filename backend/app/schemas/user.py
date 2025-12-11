@@ -25,7 +25,8 @@ class UserBase(BaseSchema):
     @validator('phone')
     def validate_phone(cls, v):
         """验证手机号格式"""
-        if v and not v.match(r'^1[3-9]\d{9}$'):
+        import re
+        if v and not re.match(r'^1[3-9]\d{9}$', v):
             raise ValueError('请输入正确的手机号码')
         return v
 
